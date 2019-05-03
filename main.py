@@ -58,11 +58,11 @@ class GeneratePoetry(object):
     # 建立模型
     def build_model(self):
         self.model = Sequential()
-        self.model.add(layers.LSTM(512, return_sequences=True, input_shape=(6, len(words))))
+        self.model.add(layers.LSTM(512, return_sequences=True, input_shape=(6, len(self.words))))
         self.model.add(layers.Dropout(0.6))
         self.model.add(layers.LSTM(256))
         self.model.add(layers.Dropout(0.6))
-        self.model.add(layers.Dense(len(words), activation='softmax'))
+        self.model.add(layers.Dense(len(self.words), activation='softmax'))
         optimizer = Adam(lr=self.config.learning_rate)
         self.model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     
@@ -138,7 +138,7 @@ class GeneratePoetry(object):
         if (self.config.epochs + 1) % 5 == 0:
             # 随机获取某首诗词中的首字用于测试  
             char = self.poems[np.random.randint(len(self.poems))][0]
-            generate = predict_first(char)
+            generate = self.predict_first(char)
             print("+++++++++++++ 随机测试: {} +++++++++++++".format(char))
             print(generate)
             
